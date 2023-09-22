@@ -1,8 +1,9 @@
-import { Container, Sprite } from "pixi.js";
+import { Container, /*Sprite,*/ Texture, TilingSprite } from "pixi.js";
 import { IUpdateable } from "../utils/Updateable";
 import { Fondo } from "../game/Fondo";
 import { Pez } from "../game/Pez";
 import { Player } from "../game/Player";
+import { HEIGHT, WHIDTH } from "..";
 
 export class TickerScene extends Container implements IUpdateable{
     private winx:number;
@@ -10,6 +11,7 @@ export class TickerScene extends Container implements IUpdateable{
     private fish:Pez[] = [];
     private playerLine : Player = new Player();
     private world:Container;
+    private bg:TilingSprite;
     constructor(windowx:number,windowy:number){
         super();
         
@@ -18,12 +20,13 @@ export class TickerScene extends Container implements IUpdateable{
         this.world = new Container();
 
         //-------------fondo-------------//
-        const water:Sprite = Sprite.from("normalWater");
-        water.scale.set(0.5,1);
+        //const water:Sprite = Sprite.from("normalWater");
+        this.bg = new TilingSprite(Texture.from("normalWater"),WHIDTH,HEIGHT)
+        this.bg.scale.set(1,2);
         const fondoMovil: Fondo = new Fondo();
-        water.y = fondoMovil.width/4;
+        //water.y = fondoMovil.width/4;
 
-        this.addChild(water);
+        this.addChild(this.bg);
         this.world.addChild(fondoMovil);
 
         //-------------jugador-------------//
@@ -49,6 +52,7 @@ export class TickerScene extends Container implements IUpdateable{
         //console.log(this.playerLine.y)
         //throw new Error("Method not implemented.");
         this.world.y = (100-this.playerLine.endLine)*this.worldTransform.d;
+        this.bg.tilePosition.y = this.world.y*0.5;
         //console.log("world y: ",this.world.y);
         //console.log('endline: ', this.playerLine.endLine);
     }

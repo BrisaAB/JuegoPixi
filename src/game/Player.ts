@@ -40,12 +40,12 @@ export class Player extends PhysicsContainer implements IHitbox{
     public override update(deltaSeconds: number): void {
         super.update(deltaSeconds/1000)
         if(Keyboard.state.get("ArrowUp")&&this.endLine>100){
-            this.endLine -= 2;
+            this.endLine -= 5;
             console.log('up')
         }else if(Keyboard.state.get("ArrowDown")&&this.endLine<HEIGHT*2)
         {
             console.log('down')
-            this.endLine += 2;
+            this.endLine += 5;
         }
         //console.log('updateLine')
         this.line.clear();
