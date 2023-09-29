@@ -9,6 +9,7 @@ import { checkCollision } from "../utils/IHitbox";
 export class TickerScene extends Container implements IUpdateable{
     private winx:number;
     private winy:number;
+    private waterSupLimit = HEIGHT*4/5;
 
     private fish:Pez[] = [];
 
@@ -18,6 +19,7 @@ export class TickerScene extends Container implements IUpdateable{
     private bg:TilingSprite;
 
     private timePassed:number = 0;
+    private changeLevel:number = 0;
 
     public score:number[] = [];
     private level:number = 1;
@@ -39,15 +41,15 @@ export class TickerScene extends Container implements IUpdateable{
         //-------------jugador-------------//
         this.playerLine.x = this.winx/2
         this.playerLine.y = this.winy/3;
-        console.log(this.playerLine.y)
+        //console.log(this.playerLine.y)
         this.world.addChild(this.playerLine);
-        console.log(this.world.y)
+        //console.log(this.world.y)
 
         //-------------inicializaciones-------------//
         for(let i=0;i<4;i++){
             this.score.push(0);
         }
-        const pez1: Pez = new Pez(0.025,0.025,windowx*3/4,windowy*3/4,-0.1,0);
+        const pez1: Pez = new Pez(-0.025,0.025,0-4824*0.025,this.waterSupLimit,0.1,0);
         //const pez2: Pez = new Pez((-0.035),0.035,(this.winx/3),(this.winy/2),20,100,-1);
         //const pez3: Pez = new Pez(0.02,0.02,(this.winx*3/8),(this.winy*3/4),5,100,1);
 
@@ -59,18 +61,36 @@ export class TickerScene extends Container implements IUpdateable{
         //this.world.addChild(pez2);
         //this.world.addChild(pez3);
         
-        this.addChild(this.world)
+        this.addChild(this.world);
 
     }
     update(_deltaTime: number, _deltaFrame?: number | undefined): void {
-        this.timePassed += _deltaTime;
-        if(this.timePassed>100 && this.level<5){
+        this.timePassed += _deltaTime/10;
+        this.changeLevel += _deltaTime/10;
+
+        if(this.changeLevel>1000 && this.level<5){
+            this.changeLevel = 0;
             this.level +=1
         }
-        //-------------nuevos peces-------------//
-        /*if(this.timePassed> 100 && this.fish.length<6){
+        //=============nuevos peces=============//
+        if(this.timePassed> 200 && this.fish.length<6){
             this.timePassed = 0;
-            const aux = Math.random()*11;
+            //const aux = Math.random()*11;//Esto es para decidir la cantidad de peces en cada nivel
+            //-----------parametros-----------//
+            const heightAux =Math.random()*((HEIGHT*2+150)-this.waterSupLimit)+this.waterSupLimit;//ARREGLAR ALTURA para que llegue hasta abajo
+            let scalexAux = 0.015+Math.random()*0.01;
+            const scaleyAux = scalexAux;
+            let posxAux = WHIDTH;
+            let velAux = -0.1;
+            const aux = Math.random()-0.5
+            if(aux<0){
+                posxAux = 0-4824*scalexAux;//ESTO ES EL TAMANIO DE LA IMAGEN, NO ES LO MEJOR PERO BUENO. Si cambias la imagen cambia esto
+                scalexAux = -scalexAux;
+                velAux = 0.1
+            }
+
+            const fishAux: Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0);
+            /*-------------PECES POR NIVELES--------------(proximamente)
             if(this.level ==1){
                 const fishAux = new Pez()//class0
             }else if(this.level==2){
@@ -91,18 +111,23 @@ export class TickerScene extends Container implements IUpdateable{
                 const fishAux = new Pez()//class2
             }l
         }*/
+        this.fish.push(fishAux);
+        this.world.addChild(fishAux);
+        }
 
-        //-------------colisiones-------------//
+        //=============colisiones=============//
         this.playerLine.update(_deltaTime);
         this.world.y = (100-this.playerLine.endLine)*this.worldTransform.d;
         this.bg.tilePosition.y = this.world.y*0.5;
         for(let pez of this.fish){
             pez.update(_deltaTime);
             const overlap = checkCollision(this.playerLine,pez);
-            console.log(overlap != false)
-            if(overlap != false){
-                this.score[pez.fclass] += 1;
-                
+            //console.log(overlap != false)
+            if(!overlap){
+                this.score[pez.getClass()] += 1;
+                pez.destroy();
+            }
+            if(pez.getRounds()>2){
                 pez.destroy();
             }
         }
