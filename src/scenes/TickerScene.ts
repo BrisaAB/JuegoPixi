@@ -3,13 +3,15 @@ import { IUpdateable } from "../utils/Updateable";
 import { Fondo } from "../game/Fondo";
 import { Pez } from "../game/Pez";
 import { Player } from "../game/Player";
-import { HEIGHT, WHIDTH } from "..";
 import { checkCollision } from "../utils/IHitbox";
+import { SceneBase } from "../utils/SceneBase";
+import { SceneManager } from "../utils/SceneManager";
+import { LoseMenu } from "./LoseMenu";
 
-export class TickerScene extends Container implements IUpdateable{
-    private winx:number;
-    private winy:number;
-    private waterSupLimit = HEIGHT*4/5;
+export class TickerScene extends SceneBase implements IUpdateable{
+   /* private winx:number;
+    private winy:number;*/
+    private waterSupLimit = SceneManager.HEIGHT*4/5;
 
     private fish:Pez[] = [];
 
@@ -24,15 +26,15 @@ export class TickerScene extends Container implements IUpdateable{
     public score:number[] = [];
     private level:number = 1;
 
-    constructor(windowx:number,windowy:number){
+    constructor(/*windowx:number,windowy:number*/){
         super();
         
-        this.winx = windowx;
-        this.winy = windowy;
+        /*this.winx = windowx;
+        this.winy = windowy;*/
         this.world = new Container();
 
         //-------------fondo-------------//
-        this.bg = new TilingSprite(Texture.from("normalWater"),WHIDTH,HEIGHT)
+        this.bg = new TilingSprite(Texture.from("normalWater"),SceneManager.WIDTH,SceneManager.HEIGHT)
         this.bg.scale.set(1,2);
         const fondoMovil: Fondo = new Fondo();
 
@@ -40,15 +42,15 @@ export class TickerScene extends Container implements IUpdateable{
         this.world.addChild(fondoMovil);
 
         //-------------jugador-------------//
-        this.playerLine.x = this.winx/2
-        this.playerLine.y = this.winy/3;
+        this.playerLine.x = SceneManager.WIDTH/2;//Si no funciona volver a poner winx y winy
+        this.playerLine.y = SceneManager.HEIGHT/3;
         this.world.addChild(this.playerLine);
 
         //-------------inicializaciones-------------//
         for(let i=0;i<4;i++){
             this.score.push(0);
         }
-        const pez1: Pez = new Pez(-0.025,0.025,0,this.waterSupLimit,0.1,0);
+        const pez1: Pez = new Pez(-0.025,0.025,0,this.waterSupLimit,0.5,0);
         
         this.fish.push(pez1);
 
@@ -60,10 +62,10 @@ export class TickerScene extends Container implements IUpdateable{
     }
     update(_deltaTime: number, _deltaFrame?: number | undefined): void {
 
-        this.timePassed += _deltaTime/10;
-        this.changeLevel += _deltaTime/10;
+        this.timePassed += _deltaTime;
+        this.changeLevel += _deltaTime;
 
-        if(this.changeLevel>1000 && this.level<5){
+        if(this.changeLevel>500 && this.level<6){
             this.changeLevel = 0;
             this.level +=1
         }
@@ -72,16 +74,16 @@ export class TickerScene extends Container implements IUpdateable{
             this.timePassed = 0;
             //const aux = Math.random()*11;//Esto es para decidir la cantidad de peces en cada nivel
             //-----------parametros-----------//
-            const heightAux =Math.random()*((HEIGHT*2+150)-this.waterSupLimit)+this.waterSupLimit;//ARREGLAR ALTURA para que llegue hasta abajo
+            const heightAux =Math.random()*((SceneManager.HEIGHT*2+150)-this.waterSupLimit)+this.waterSupLimit;//ARREGLAR ALTURA para que llegue hasta abajo
             let scalexAux = 0.015+Math.random()*0.01;
             const scaleyAux = scalexAux;
-            let posxAux = WHIDTH;
-            let velAux = -0.1;
+            let posxAux = SceneManager.WIDTH;
+            let velAux = -0.5;
             const aux = Math.random()-0.5
             if(aux<0){
                 posxAux = 0-4824*scalexAux;//ESTO ES EL TAMANIO DE LA IMAGEN, NO ES LO MEJOR PERO BUENO. Si cambias la imagen cambia esto
                 scalexAux = -scalexAux;
-                velAux = 0.1
+                velAux = 0.5
             }
 
             const fishAux: Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0);
@@ -129,6 +131,11 @@ export class TickerScene extends Container implements IUpdateable{
         }
 
         this.fish = this.fish.filter((elem) => !elem.destroyed);
+        if(this.level >= 2){
+            const looseScene = new LoseMenu();
+            SceneManager.changeScene(looseScene);
+            
+        }
     }
 
 }

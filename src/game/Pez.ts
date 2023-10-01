@@ -1,7 +1,7 @@
 import {Graphics, Rectangle, Sprite} from "pixi.js";
 import {IHitbox} from "../utils/IHitbox";
 import { PhysicsContainer } from "./PhysicsContainer";
-import { WHIDTH } from "..";
+import { SceneManager } from "../utils/SceneManager";
 
 
 export class Pez extends PhysicsContainer implements IHitbox{
@@ -49,7 +49,7 @@ export class Pez extends PhysicsContainer implements IHitbox{
     }
     public override update(deltaSeconds: number): void {
         super.update(deltaSeconds);
-        if(this.pez.x+this.x<0-this.pez.width||this.pez.x+this.x>WHIDTH+this.pez.width+10){
+        if(this.pez.x+this.x<0-this.pez.width||this.pez.x+this.x>SceneManager.WIDTH+this.pez.width+10){
             this.speed.x = -this.speed.x;
             this.pez.scale.x = -this.pez.scale.x;
             this.hitbox.scale.x = -this.hitbox.scale.x;

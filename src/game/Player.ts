@@ -1,8 +1,8 @@
 import { Graphics, Rectangle, Sprite } from "pixi.js";
 import { PhysicsContainer } from "./PhysicsContainer";
 import { Keyboard } from "../utils/Keyboard";
-import { HEIGHT } from "..";
 import { IHitbox } from "../utils/IHitbox";
+import { SceneManager } from "../utils/SceneManager";
 
 export class Player extends PhysicsContainer implements IHitbox{
     public endLine: number = 100;
@@ -42,7 +42,7 @@ export class Player extends PhysicsContainer implements IHitbox{
         if(Keyboard.state.get("ArrowUp")&&this.endLine>100){
             this.endLine -= 5;
             console.log('up')
-        }else if(Keyboard.state.get("ArrowDown")&&this.endLine<HEIGHT*2)
+        }else if(Keyboard.state.get("ArrowDown")&&this.endLine<SceneManager.HEIGHT*2)
         {
             console.log('down')
             this.endLine += 5;
