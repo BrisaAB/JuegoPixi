@@ -1,4 +1,4 @@
-import { Container, /*Sprite,*/ Texture, TilingSprite } from "pixi.js";
+import { Container, Texture, TilingSprite } from "pixi.js";
 import { IUpdateable } from "../utils/Updateable";
 import { Fondo } from "../game/Fondo";
 import { Pez } from "../game/Pez";
@@ -23,6 +23,7 @@ export class TickerScene extends Container implements IUpdateable{
 
     public score:number[] = [];
     private level:number = 1;
+
     constructor(windowx:number,windowy:number){
         super();
         
@@ -41,30 +42,24 @@ export class TickerScene extends Container implements IUpdateable{
         //-------------jugador-------------//
         this.playerLine.x = this.winx/2
         this.playerLine.y = this.winy/3;
-        //console.log(this.playerLine.y)
         this.world.addChild(this.playerLine);
-        //console.log(this.world.y)
 
         //-------------inicializaciones-------------//
         for(let i=0;i<4;i++){
             this.score.push(0);
         }
-        const pez1: Pez = new Pez(-0.025,0.025,0-4824*0.025,this.waterSupLimit,0.1,0);
-        //const pez2: Pez = new Pez((-0.035),0.035,(this.winx/3),(this.winy/2),20,100,-1);
-        //const pez3: Pez = new Pez(0.02,0.02,(this.winx*3/8),(this.winy*3/4),5,100,1);
-
+        const pez1: Pez = new Pez(-0.025,0.025,0,this.waterSupLimit,0.1,0);
+        
         this.fish.push(pez1);
-       // this.fish.push(pez2);
-        //this.fish.push(pez3);
 
         this.world.addChild(pez1);
-        //this.world.addChild(pez2);
-        //this.world.addChild(pez3);
-        
+
+
         this.addChild(this.world);
 
     }
     update(_deltaTime: number, _deltaFrame?: number | undefined): void {
+
         this.timePassed += _deltaTime/10;
         this.changeLevel += _deltaTime/10;
 
@@ -110,9 +105,9 @@ export class TickerScene extends Container implements IUpdateable{
             }else{
                 const fishAux = new Pez()//class2
             }l
-        }*/
-        this.fish.push(fishAux);
-        this.world.addChild(fishAux);
+            }*/
+            this.fish.push(fishAux);
+            this.world.addChild(fishAux);
         }
 
         //=============colisiones=============//
@@ -123,7 +118,8 @@ export class TickerScene extends Container implements IUpdateable{
             pez.update(_deltaTime);
             const overlap = checkCollision(this.playerLine,pez);
             //console.log(overlap != false)
-            if(!overlap){
+            if(overlap){
+                console.log('lpm');
                 this.score[pez.getClass()] += 1;
                 pez.destroy();
             }
@@ -131,7 +127,8 @@ export class TickerScene extends Container implements IUpdateable{
                 pez.destroy();
             }
         }
-        this.fish = this.fish.filter((elem) => !elem.destroyed)
+
+        this.fish = this.fish.filter((elem) => !elem.destroyed);
     }
 
 }

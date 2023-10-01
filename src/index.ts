@@ -1,4 +1,4 @@
-import { Application, Loader, /*Sprite,*/Ticker } from 'pixi.js'
+import { Application,Loader, Ticker } from 'pixi.js'
 import { assets } from './assets';
 import { TickerScene } from './scenes/TickerScene';
 import { Keyboard } from './utils/Keyboard';

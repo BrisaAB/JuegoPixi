@@ -16,16 +16,19 @@ export class Pez extends PhysicsContainer implements IHitbox{
         super();
         //-------------pez-------------//
         this.fclass = fclass;
-        if(this.fclass==0){
+        this.pez = Sprite.from("normalFish");
+        this.speed.x = speed;
+    
+        /* if(this.fclass==0){
             this.pez = Sprite.from("normalFish"); //La idea de esto es cambiar los sprites para tener 
             this.speed.x = speed;
         }else if(this.fclass==1){                //tres tipos de peces diferentes, por ahora les pon-
             this.pez = Sprite.from("normalFish"); //go el mismo sprite
-            //this.speed.x = speed*1.5;
+            //this.speed.x = speed*1.25;
         }else if(this.fclass==2){
             this.pez = Sprite.from("normalFish");
-            //this.speed.x = speed*2;     
-        }
+            //this.speed.x = speed*1.5;     
+        }*/
         this.pez.scale.set(scalex,scaley);
         this.pez.y = y;
         this.pez.x = x;
@@ -43,27 +46,10 @@ export class Pez extends PhysicsContainer implements IHitbox{
         //-------------adds-------------//
         this.addChild(this.pez);
         this.addChild(this.hitbox);
-        console.log(this.pez.x)
     }
     public override update(deltaSeconds: number): void {
         super.update(deltaSeconds);
-        //console.log(this.pez.x)
-        //console.log(this.pez.x+this.x)
-        //console.log(this.pez.width)
-       /* if(this.pez.x+this.x<0-this.pez.width){
-            console.log('izquierda')
-            this.speed.x = -this.speed.x;
-            this.pez.scale.x = -this.pez.scale.x;
-            //this.rounds = 3
-        }
-        if(this.pez.x+this.x>WHIDTH+this.pez.width+10){
-            console.log('derecha')
-            this.speed.x = -this.speed.x;
-            this.pez.scale.x = -this.pez.scale.x;
-            //this.rounds = 3
-        }*/
         if(this.pez.x+this.x<0-this.pez.width||this.pez.x+this.x>WHIDTH+this.pez.width+10){
-            console.log('pez', this.x);
             this.speed.x = -this.speed.x;
             this.pez.scale.x = -this.pez.scale.x;
             this.hitbox.scale.x = -this.hitbox.scale.x;
