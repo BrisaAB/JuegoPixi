@@ -28,9 +28,7 @@ export class TickerScene extends SceneBase implements IUpdateable{
 
     constructor(/*windowx:number,windowy:number*/){
         super();
-        
-        /*this.winx = windowx;
-        this.winy = windowy;*/
+
         this.world = new Container();
 
         //-------------fondo-------------//
@@ -50,7 +48,7 @@ export class TickerScene extends SceneBase implements IUpdateable{
         for(let i=0;i<4;i++){
             this.score.push(0);
         }
-        const pez1: Pez = new Pez(-0.025,0.025,0,this.waterSupLimit,0.5,0);
+        const pez1: Pez = new Pez(-0.025,0.025,0,this.waterSupLimit,0.5);
         
         this.fish.push(pez1);
 
@@ -72,42 +70,40 @@ export class TickerScene extends SceneBase implements IUpdateable{
         //=============nuevos peces=============//
         if(this.timePassed> 200 && this.fish.length<6){
             this.timePassed = 0;
-            //const aux = Math.random()*11;//Esto es para decidir la cantidad de peces en cada nivel
+            const aux = Math.random()*11;//Esto es para decidir la cantidad de peces en cada nivel
             //-----------parametros-----------//
             const heightAux =Math.random()*((SceneManager.HEIGHT*2+150)-this.waterSupLimit)+this.waterSupLimit;//ARREGLAR ALTURA para que llegue hasta abajo
             let scalexAux = 0.015+Math.random()*0.01;
             const scaleyAux = scalexAux;
             let posxAux = SceneManager.WIDTH;
-            let velAux = -0.5;
-            const aux = Math.random()-0.5
-            if(aux<0){
+            let velAux = -1;
+            const aux2 = Math.random()-0.5
+            if(aux2<0){
                 posxAux = 0-4824*scalexAux;//ESTO ES EL TAMANIO DE LA IMAGEN, NO ES LO MEJOR PERO BUENO. Si cambias la imagen cambia esto
                 scalexAux = -scalexAux;
-                velAux = 0.5
+                velAux = 1
             }
 
-            const fishAux: Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0);
-            /*-------------PECES POR NIVELES--------------(proximamente)
-            if(this.level ==1){
-                const fishAux = new Pez()//class0
+            //const fishAux: Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0);
+            //-------------PECES POR NIVELES--------------(proximamente)
+            let fishAux:Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux);
+            if(this.level==1){
+                fishAux.setClass(0);
             }else if(this.level==2){
                 if(aux<8){
-                    const fishAux = new Pez()//class0
-                }else{
-                    const fishAux = new Pez()//class1
+                    fishAux.setClass(1);//en el nivel 2, van a haber varios peces de clase 1
                 }
             }else if(this.level==3){
-                const fishAux = new Pez()//class1
+                fishAux.setClass(1);
             }else if(this.level==4){
                 if(aux<8){
-                    const fishAux = new Pez()//class1
+                    fishAux.setClass(1);
                 }else{
-                    const fishAux = new Pez()//class2
+                    fishAux.setClass(2);
                 }
             }else{
-                const fishAux = new Pez()//class2
-            }l
-            }*/
+                //const fishAux = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0)//class2
+            }
             this.fish.push(fishAux);
             this.world.addChild(fishAux);
         }
@@ -119,9 +115,7 @@ export class TickerScene extends SceneBase implements IUpdateable{
         for(let pez of this.fish){
             pez.update(_deltaTime);
             const overlap = checkCollision(this.playerLine,pez);
-            //console.log(overlap != false)
             if(overlap){
-                console.log('lpm');
                 this.score[pez.getClass()] += 1;
                 pez.destroy();
             }
@@ -131,8 +125,8 @@ export class TickerScene extends SceneBase implements IUpdateable{
         }
 
         this.fish = this.fish.filter((elem) => !elem.destroyed);
-        if(this.level >= 2){
-            const looseScene = new LoseMenu();
+        if(this.level >= 0){
+            const looseScene = new LoseMenu(this.score);
             SceneManager.changeScene(looseScene);
             
         }

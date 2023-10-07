@@ -4,7 +4,9 @@ export const assets = [
     {url:"./cielo.jpg", name:"normalSky"},
     {url:"./fondoAgua.jpg", name:"normalWater"},
     {url:"./fondoTierraEditado.png", name:"normalGround"},
-    {url:"./Pez.png", name:"normalFish"},
+    {url:"./Pez.png", name:"normalFish0"},
+    {url:"./Pez.png", name:"normalFish1"},
+    {url:"./Pez.png", name:"normalFish2"},
     
     {url:"./botonSF.png", name:"normalButton"},
     {url:"./botonSFdown.png", name:"downButton"},

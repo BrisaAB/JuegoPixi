@@ -1,4 +1,4 @@
-import {Graphics, Rectangle, Sprite} from "pixi.js";
+import {Graphics, Rectangle, Sprite, Texture} from "pixi.js";
 import {IHitbox} from "../utils/IHitbox";
 import { PhysicsContainer } from "./PhysicsContainer";
 import { SceneManager } from "../utils/SceneManager";
@@ -10,13 +10,12 @@ export class Pez extends PhysicsContainer implements IHitbox{
 
     private pez: Sprite = new Sprite();
 
-    private fclass:number;
+    private fclass:number = 0;
 
-    constructor(scalex: number,scaley: number,x: number,y: number,speed:number,fclass:number){
+    constructor(scalex: number,scaley: number,x: number,y: number,speed:number){
         super();
         //-------------pez-------------//
-        this.fclass = fclass;
-        this.pez = Sprite.from("normalFish");
+        this.pez = Sprite.from("normalFish0");
         this.speed.x = speed;
     
         /* if(this.fclass==0){
@@ -54,6 +53,16 @@ export class Pez extends PhysicsContainer implements IHitbox{
             this.pez.scale.x = -this.pez.scale.x;
             this.hitbox.scale.x = -this.hitbox.scale.x;
             this.rounds++;
+        }
+    }
+    setClass(newClass:number):void{
+        this.fclass = newClass;
+        const fishSprite:string = "normalFish"+newClass.toString();
+        this.pez.texture = Texture.from(fishSprite);
+        if(this.fclass==1){
+        this.speed.x = this.speed.x*1.25;
+        }else if(this.fclass==2){
+            this.speed.x = this.speed.x*1.5;     
         }
     }
     getHitbox(): Rectangle {

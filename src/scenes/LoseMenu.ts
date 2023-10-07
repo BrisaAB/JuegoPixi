@@ -4,11 +4,12 @@ import { Objeto } from "../game/Objeto";
 import { Button } from "../ui/Button";
 import { SceneBase } from "../utils/SceneBase";
 import { SceneManager } from "../utils/SceneManager";
+import { MainMenu } from "./MainMenu";
 
 export class LoseMenu extends SceneBase {
     private buttonMouse:Button;
 
-    constructor(){
+    constructor(score:number[]){
         super();
         const tablero = new NineSlicePlane(
             Texture.from("normalTablero"),
@@ -32,9 +33,9 @@ export class LoseMenu extends SceneBase {
         cartel.y = tablero.y-((cartel.height*escalaC)/3);
         cartel.x = (SceneManager.WIDTH-(cartel.width*escalaC))/2;
         
-        const titulo = new Text("Nivel X", {fontSize: 40, fill: 0x54d16e});
-        titulo.x = cartel.x+(titulo.width/2)-5;
-        titulo.y = cartel.y+(titulo.height/2)-10;
+        const titulo = new Text("Completo", {fontSize: 40, fill: 0x54d16e});
+        titulo.x = SceneManager.WIDTH/2;
+        titulo.y = cartel.y+(titulo.height/2);
         
         const estrella1: Objeto = new Objeto("normalEstrellaL",
                                             tablero.x+(tablero.width*escalaT*2/9),
@@ -50,24 +51,33 @@ export class LoseMenu extends SceneBase {
                                             0.2,0.2,20);
         const mod1: ModuloCartel = new ModuloCartel("Puntos:","nada","",(cartel.width)*escalaC);
 
+        //let scores:ModuloCartel[] = [];
+
+        /*for(let i = 0; i<score.length;i++){
+            const mod2: ModuloCartel = new ModuloCartel("","normalFish","X "+scores[i],(cartel.width)*escalaC);
+            mod2.x = tablero.x+((1/6)*(tablero.width*escalaT));
+            mod2.y = (tablero.height*escalaT*i+5/10);
+            scores.push(mod2)
+            this.addChild(mod2)
+        }*/
         mod1.x = tablero.x+((1/6)*(tablero.width*escalaT));
         mod1.y = (tablero.height*escalaT*2/5);
         
-        const mod2: ModuloCartel = new ModuloCartel("","normalFish","X 152",(cartel.width)*escalaC);
+        const mod2: ModuloCartel = new ModuloCartel("","normalFish0","x"+score[0].toString(),(cartel.width)*escalaC);
 
         mod2.x = tablero.x+((1/6)*(tablero.width*escalaT));
         mod2.y = (tablero.height*escalaT*5/10);
         
-        const mod3: ModuloCartel = new ModuloCartel("","normalFish","X 2",(cartel.width)*escalaC);
+        const mod3: ModuloCartel = new ModuloCartel("","normalFish0","x"+score[1].toString(),(cartel.width)*escalaC);
 
         mod3.x = tablero.x+((1/6)*(tablero.width*escalaT));
         mod3.y = (tablero.height*escalaT*6/10);//La idea es que tengan diferentes imagenes de peces, pero por ahora uso la misma
         
-        const mod4: ModuloCartel = new ModuloCartel("","normalFish","X 16",(cartel.width)*escalaC);
+        const mod4: ModuloCartel = new ModuloCartel("","normalFish0","x"+ score[2].toString(),(cartel.width)*escalaC);
 
         mod4.x = tablero.x+((1/6)*(tablero.width*escalaT));
         mod4.y = (tablero.height*escalaT*7/10);
-        
+
         this.buttonMouse = new Button(Texture.from("normalButton"),
                                     Texture.from("downButton"),
                                     Texture.from("overButton"),
@@ -76,12 +86,8 @@ export class LoseMenu extends SceneBase {
         this.buttonMouse.x = tablero.x+(tablero.width*(escalaT)/2);
         this.buttonMouse.y = (tablero.height*escalaT*9/10);
         this.buttonMouse.scale.set(0.08);
-        /*const boton: Objeto = new Objeto("normalBoton",
-                                        tablero.x+(tablero.width*(escalaT)/2),
-                                        (tablero.height*escalaT*9/10),
-                                        0.08,0.08);*/
-        
-        const tBoton = new Text("Continuar", {fontSize: 35, fill: 0xa9ffbf});
+
+        const tBoton = new Text("Menu", {fontSize: 35, fill: 0xa9ffbf});
         tBoton.x = tablero.x+(tablero.width*(escalaT)/2)-(tBoton.width/2);
         tBoton.y = (tablero.height*escalaT*9/10)-(tBoton.height*2/3)
 
@@ -99,7 +105,8 @@ export class LoseMenu extends SceneBase {
         this.addChild(tBoton);
     }
     private onButtonClick():void{
-        console.log("my new button clicked!");
+        const menuScene = new MainMenu();
+            SceneManager.changeScene(menuScene);
     }
     public override update(): void {
     }
