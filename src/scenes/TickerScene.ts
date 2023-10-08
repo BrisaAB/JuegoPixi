@@ -22,6 +22,7 @@ export class TickerScene extends SceneBase implements IUpdateable{
 
     private timePassed:number = 0;
     private changeLevel:number = 0;
+    private time:number = 0;
 
     public score:number[] = [];
     private level:number = 1;
@@ -62,13 +63,13 @@ export class TickerScene extends SceneBase implements IUpdateable{
 
         this.timePassed += _deltaTime;
         this.changeLevel += _deltaTime;
-
-        if(this.changeLevel>500 && this.level<6){
+        this.time += _deltaTime;
+        if(this.changeLevel>180 && this.level<6){
             this.changeLevel = 0;
             this.level +=1
         }
         //=============nuevos peces=============//
-        if(this.timePassed> 200 && this.fish.length<6){
+        if(this.timePassed> 15 && this.fish.length<8){
             this.timePassed = 0;
             const aux = Math.random()*11;//Esto es para decidir la cantidad de peces en cada nivel
             //-----------parametros-----------//
@@ -76,12 +77,12 @@ export class TickerScene extends SceneBase implements IUpdateable{
             let scalexAux = 0.015+Math.random()*0.01;
             const scaleyAux = scalexAux;
             let posxAux = SceneManager.WIDTH;
-            let velAux = -1;
-            const aux2 = Math.random()-0.5
+            let velAux = -(Math.random()+5);
+            const aux2 = Math.random()-0.5;
             if(aux2<0){
                 posxAux = 0-4824*scalexAux;//ESTO ES EL TAMANIO DE LA IMAGEN, NO ES LO MEJOR PERO BUENO. Si cambias la imagen cambia esto
                 scalexAux = -scalexAux;
-                velAux = 1
+                velAux = -velAux;
             }
 
             //const fishAux: Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0);
@@ -125,7 +126,7 @@ export class TickerScene extends SceneBase implements IUpdateable{
         }
 
         this.fish = this.fish.filter((elem) => !elem.destroyed);
-        if(this.level >= 0){
+        if(this.time >= 900){
             const looseScene = new LoseMenu(this.score);
             SceneManager.changeScene(looseScene);
             

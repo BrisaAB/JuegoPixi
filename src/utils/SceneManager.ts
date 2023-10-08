@@ -71,6 +71,6 @@ export namespace SceneManager{
 
     function update(framePassed:number){
         //si tengo animaciones con tween: Group.shared.update();
-        currentScene?.update(framePassed,Ticker.shared.elapsedMS)
+        currentScene?.update(Ticker.shared.elapsedMS/100,framePassed)
     }
 }

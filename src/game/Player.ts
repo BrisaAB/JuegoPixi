@@ -5,7 +5,7 @@ import { IHitbox } from "../utils/IHitbox";
 import { SceneManager } from "../utils/SceneManager";
 
 export class Player extends PhysicsContainer implements IHitbox{
-    public endLine: number = 100;
+    public endLine: number = 101;
 
     public line:Graphics = new Graphics();
 
@@ -15,6 +15,10 @@ export class Player extends PhysicsContainer implements IHitbox{
     private scaleHook = 0.15;
     private posx = 0- ((this.hook.width*2/3))*this.scaleHook;
 
+    private speedy:number=0;
+    private accelerationy:number=0;
+    private mooving:boolean=false;
+    private up:boolean = false;
     constructor(){
         super();
         this.line.lineStyle({color: 0x000000, width: 5, alpha: 1});
@@ -37,17 +41,57 @@ export class Player extends PhysicsContainer implements IHitbox{
         this.addChild(this.hook);
         this.addChild(this.hitbox);
     }
-    public override update(deltaSeconds: number): void {
-        super.update(deltaSeconds/1000)
+    public override update(deltaTime: number): void {
+        const dt = deltaTime/1000;
+        const maxvel = 70;
+        super.update(dt)
         if(Keyboard.state.get("ArrowUp")&&this.endLine>100){
-            this.endLine -= 5;
-            console.log('up')
+            this.mooving = true;
+            this.up = true;
+            console.log('up',this.speedy)
+            if(this.speedy > -maxvel){
+                this.accelerationy -= 10;
+            }else{
+                this.accelerationy = 0;
+                this.speedy = -maxvel;
+            }            
         }else if(Keyboard.state.get("ArrowDown")&&this.endLine<SceneManager.HEIGHT*2)
         {
-            console.log('down')
-            this.endLine += 5;
+            this.mooving = true;
+            this.up = false;
+            console.log('down',this.speedy)
+            if(this.speedy < maxvel){
+                this.accelerationy += 10;
+            }else{
+                this.accelerationy = 0;
+                this.speedy = maxvel;
+            }          
+        }else if(this.endLine>100&&this.endLine<SceneManager.HEIGHT*2){
+            console.log('none', this.speedy)
+            if(this.mooving){
+                if(this.up){
+                    this.accelerationy = 10;
+                }else{
+                    this.accelerationy = -10;
+                }
+                this.mooving = false;
+            }else if(Math.abs(this.speedy)<9){
+                this.accelerationy = 0;
+                this.speedy = 0;
+            }
+        }else{
+            this.accelerationy = 0;
+            this.speedy = 0;
         }
-        //console.log('updateLine')
+
+        const auxVel =this.speedy * deltaTime + 1/2*this.accelerationy*deltaTime*deltaTime;
+        const auxPos = this.endLine + auxVel;
+        if(auxVel<maxvel && auxVel > -maxvel && auxPos>100&&auxPos<SceneManager.HEIGHT*2){
+            this.endLine += auxVel;
+            this.speedy += this.accelerationy*deltaTime;
+        }else{
+            this.speedy = 0;
+        }
         this.line.clear();
         this.line.lineStyle({color: 0x000000, width: 5, alpha: 1});
         this.line.moveTo(0,0);
