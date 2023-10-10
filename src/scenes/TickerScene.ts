@@ -9,8 +9,6 @@ import { SceneManager } from "../utils/SceneManager";
 import { LoseMenu } from "./LoseMenu";
 
 export class TickerScene extends SceneBase implements IUpdateable{
-   /* private winx:number;
-    private winy:number;*/
     private waterSupLimit = SceneManager.HEIGHT*4/5;
 
     private fish:Pez[] = [];
@@ -27,12 +25,12 @@ export class TickerScene extends SceneBase implements IUpdateable{
     public score:number[] = [];
     private level:number = 1;
 
-    constructor(/*windowx:number,windowy:number*/){
+    constructor(){
         super();
 
         this.world = new Container();
 
-        //-------------fondo-------------//
+        //=================fondo==================//
         this.bg = new TilingSprite(Texture.from("normalWater"),SceneManager.WIDTH,SceneManager.HEIGHT)
         this.bg.scale.set(1,2);
         const fondoMovil: Fondo = new Fondo();
@@ -40,16 +38,16 @@ export class TickerScene extends SceneBase implements IUpdateable{
         this.addChild(this.bg);
         this.world.addChild(fondoMovil);
 
-        //-------------jugador-------------//
+        //=================jugador==================//
         this.playerLine.x = SceneManager.WIDTH/2;//Si no funciona volver a poner winx y winy
         this.playerLine.y = SceneManager.HEIGHT/3;
         this.world.addChild(this.playerLine);
 
-        //-------------inicializaciones-------------//
+        //=================inicializaciones==================//
         for(let i=0;i<4;i++){
             this.score.push(0);
         }
-        const pez1: Pez = new Pez(-0.025,0.025,0,this.waterSupLimit,0.5);
+        const pez1: Pez = new Pez(-0.025,0.025,0,this.waterSupLimit,5);
         
         this.fish.push(pez1);
 
@@ -71,39 +69,56 @@ export class TickerScene extends SceneBase implements IUpdateable{
         //=============nuevos peces=============//
         if(this.timePassed> 15 && this.fish.length<8){
             this.timePassed = 0;
-            const aux = Math.random()*11;//Esto es para decidir la cantidad de peces en cada nivel
+            const aux = Math.random();//Esto es para decidir la cantidad de peces en cada nivel
             //-----------parametros-----------//
             const heightAux =Math.random()*((SceneManager.HEIGHT*2+150)-this.waterSupLimit)+this.waterSupLimit;//ARREGLAR ALTURA para que llegue hasta abajo
-            let scalexAux = 0.015+Math.random()*0.01;
+            let scalexAux = 0.04+Math.random()*0.04;
             const scaleyAux = scalexAux;
             let posxAux = SceneManager.WIDTH;
-            let velAux = -(Math.random()+5);
+            let velAux = -(Math.random()+10);
             const aux2 = Math.random()-0.5;
             if(aux2<0){
-                posxAux = 0-4824*scalexAux;//ESTO ES EL TAMANIO DE LA IMAGEN, NO ES LO MEJOR PERO BUENO. Si cambias la imagen cambia esto
+                posxAux = 0-2412*scalexAux;//ESTO ES EL TAMANIO DE LA IMAGEN, NO ES LO MEJOR PERO BUENO-no, no es :(-. Si cambias la imagen cambia esto
                 scalexAux = -scalexAux;
                 velAux = -velAux;
             }
 
-            //const fishAux: Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0);
-            //-------------PECES POR NIVELES--------------(proximamente)
+            //-------------PECES POR NIVELES--------------
             let fishAux:Pez = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux);
+
             if(this.level==1){
                 fishAux.setClass(0);
             }else if(this.level==2){
-                if(aux<8){
+                if(aux<0.8){
                     fishAux.setClass(1);//en el nivel 2, van a haber varios peces de clase 1
+                }else{
+                    fishAux.setClass(0);
                 }
             }else if(this.level==3){
-                fishAux.setClass(1);
+                if(aux<0.4){
+                    fishAux.setClass(0);
+                }else if(aux<0.7){
+                    fishAux.setClass(1);
+                }else{
+                    fishAux.setClass(2);
+                }
+                
             }else if(this.level==4){
-                if(aux<8){
+                if(aux<0.33){
+                    fishAux.setClass(0);
+                }else if(aux<0.66){
                     fishAux.setClass(1);
                 }else{
                     fishAux.setClass(2);
                 }
             }else{
-                //const fishAux = new Pez(scalexAux,scaleyAux,posxAux,heightAux,velAux,0)//class2
+                if(aux<0.7){
+                    fishAux.setClass(1);
+                } else if(aux<0.95){
+                    fishAux.setClass(2);
+                }else{
+                    fishAux.setClass(0);
+                }
             }
             this.fish.push(fishAux);
             this.world.addChild(fishAux);

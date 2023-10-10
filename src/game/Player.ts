@@ -21,7 +21,7 @@ export class Player extends PhysicsContainer implements IHitbox{
     private up:boolean = false;
     constructor(){
         super();
-        this.line.lineStyle({color: 0x000000, width: 5, alpha: 1});
+        this.line.lineStyle({color: 0x000000, width: 1, alpha: 1});
         this.line.moveTo(0,0);
         this.line.lineTo(0,this.endLine);
         
@@ -30,7 +30,7 @@ export class Player extends PhysicsContainer implements IHitbox{
         this.hook.scale.set(this.scaleHook);
         
         this.hitbox = new Graphics();
-        this.hitbox.beginFill(0xFFFF00,0.3);
+        this.hitbox.beginFill(0xFFFF00,0.001);
         this.hitbox.drawRect(10,0,30,45);
         this.hitbox.endFill();
         //this.hitbox.scale.set();
@@ -93,7 +93,7 @@ export class Player extends PhysicsContainer implements IHitbox{
             this.speedy = 0;
         }
         this.line.clear();
-        this.line.lineStyle({color: 0x000000, width: 5, alpha: 1});
+        this.line.lineStyle({color: 0x000000, width: 1, alpha: 1});
         this.line.moveTo(0,0);
         this.line.lineTo(0,this.endLine);
         this.hook.position.set( this.posx,this.endLine-10);
