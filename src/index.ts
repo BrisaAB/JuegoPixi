@@ -10,7 +10,8 @@ Loader.shared.onComplete.add(()=>{
 
 	const TScene = new MainMenu();
 	SceneManager.initialize();
-	SceneManager.changeScene(TScene)
+	SceneManager.changeScene(TScene);
+	window.addEventListener("contextmenu",e=>e.preventDefault());
 })   
 
 Loader.shared.load();
