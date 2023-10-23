@@ -48,7 +48,6 @@ export class Player extends PhysicsContainer implements IHitbox{
         if(Keyboard.state.get("ArrowUp")&&this.endLine>100){
             this.mooving = true;
             this.up = true;
-            console.log('up',this.speedy)
             if(this.speedy > -maxvel){
                 this.accelerationy -= 10;
             }else{
@@ -59,7 +58,7 @@ export class Player extends PhysicsContainer implements IHitbox{
         {
             this.mooving = true;
             this.up = false;
-            console.log('down',this.speedy)
+
             if(this.speedy < maxvel){
                 this.accelerationy += 10;
             }else{
@@ -67,12 +66,12 @@ export class Player extends PhysicsContainer implements IHitbox{
                 this.speedy = maxvel;
             }          
         }else if(this.endLine>100&&this.endLine<SceneManager.HEIGHT*2){
-            console.log('none', this.speedy)
+
             if(this.mooving){
                 if(this.up){
-                    this.accelerationy = 10;
+                    this.accelerationy = 25;
                 }else{
-                    this.accelerationy = -10;
+                    this.accelerationy = -25;
                 }
                 this.mooving = false;
             }else if(Math.abs(this.speedy)<9){

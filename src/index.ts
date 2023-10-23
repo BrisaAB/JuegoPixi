@@ -8,7 +8,7 @@ Loader.shared.add(assets)
         
 Loader.shared.onComplete.add(()=>{	
 
-	const TScene = new MainMenu(/*app.screen.width, app.screen.height*/);
+	const TScene = new MainMenu();
 	SceneManager.initialize();
 	SceneManager.changeScene(TScene)
 })   

@@ -27,7 +27,6 @@ export namespace SceneManager{
         
         Keyboard.initialize();
         window.addEventListener("resize",()=>{
-                console.log("resized");
                 //-------------TAMANO DEL JUEGO-------------------
                 //Calculo las escalas en X y en Y dividiendo el ancho y 
                 //alto real de la pantalla(window.inner...) por el ancho

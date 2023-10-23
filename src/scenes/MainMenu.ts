@@ -1,8 +1,9 @@
-import { Texture,Text, Sprite} from "pixi.js";
+import { Texture,Text, Sprite /*,NineSlicePlane*/} from "pixi.js";
 import { Button } from "../ui/Button";
 import { SceneBase } from "../utils/SceneBase";
 import { TickerScene } from "./TickerScene";
 import { SceneManager } from "../utils/SceneManager";
+import { InstructionsScene1 } from "./InstructionsScene1";
 
 export class MainMenu extends SceneBase {
     private playButton:Button;
@@ -14,7 +15,11 @@ export class MainMenu extends SceneBase {
         const background:Sprite = Sprite.from("normalFondoM");
         background.scale.set(0.25)
         this.addChild(background);
-
+       const titulo:Sprite = Sprite.from("normalTitulo");
+       titulo.x = 20;
+       titulo.y = 20;
+       titulo.scale.set(0.4);
+       this.addChild(titulo);
         //=================botones==================//
         this.playButton = new Button(Texture.from("normalButton"),
                                     Texture.from("downButton"),
@@ -46,6 +51,18 @@ export class MainMenu extends SceneBase {
         this.addChild(pBoton);
         this.addChild(iBoton);
 
+        const texto2 = new Text("*a exepción del fondo del agua y la imagen del anzuelo", {fontSize: 10, fill: 0x372e36,wordWrap:true,wordWrapWidth:640});
+        texto2.anchor.set(1,1);
+        texto2.x = SceneManager.WIDTH;
+        texto2.y = SceneManager.HEIGHT;
+
+        const texto1 = new Text("Juego e ilustraciones* realizadas por Brisa Antuña Bianchi durante el curso de programación de videojuegos proporcionado por Capital Activa, Municipalidad de Santa Fe 2023", {fontSize: 10, fill: 0x372e36,wordWrap:true,wordWrapWidth:640});
+        texto1.anchor.set(0,1);
+        texto1.x = 0;
+        texto1.y = SceneManager.HEIGHT-texto2.height;
+
+        this.addChild(texto1);
+        this.addChild(texto2);
     }
     public override update(_deltaFrame: number, _deltaTime?: number | undefined): void {
       //
@@ -55,6 +72,7 @@ export class MainMenu extends SceneBase {
             SceneManager.changeScene(gameScene);
     }
     private onButtonClickI():void{
-        console.log("my new button clicked!");
+        const insScene = new InstructionsScene1();
+        SceneManager.changeScene(insScene);
     }
 }

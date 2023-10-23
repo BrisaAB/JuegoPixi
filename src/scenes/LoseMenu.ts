@@ -62,7 +62,7 @@ export class LoseMenu extends SceneBase {
                                             0.2,0.2,20);
         */
        //=================puntajes==================//
-        const mod1: ModuloCartel = new ModuloCartel("Puntos:","nada","",tablero.width*escalaT/2);
+        const mod1: ModuloCartel = new ModuloCartel("Puntaje:","nada","",tablero.width*escalaT/2);
 
         mod1.x = tablero.x-mod1.width*1/3//tablero.x+((1/6)*(tablero.width*escalaT));
         mod1.y = (tablero.height*escalaT*2/10);
